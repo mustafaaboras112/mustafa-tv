@@ -1,0 +1,203 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+void main() {
+  runApp(MustafaTVApp());
+}
+
+class MustafaTVApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Mustafa TV',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.green),
+      home: HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  final List<String> channels = [
+    'beIN SPORTS (1080P)',
+    'beIN SPORTS (720P)',
+    'beIN SPORTS (360P)',
+    'beIN SPORTS (244P)',
+    'beIN ENTERTAINMENT',
+    'SSC SPORTS',
+    'ARABIC CHANNELS',
+    'MBC CHANNELS',
+    'FRANCE CHANNELS',
+    'TURKISH CHANNELS',
+    'KIDS CHANNELS',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Mustafa TV'),
+        centerTitle: true,
+        leading: Icon(Icons.menu),
+        actions: [IconButton(icon: Icon(Icons.search), onPressed: () {})],
+      ),
+      body: ListView.builder(
+        padding: EdgeInsets.all(8),
+        itemCount: channels.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.green,
+                side: BorderSide(color: Colors.green, width: 2),
+                padding: EdgeInsets.symmetric(vertical: 18),
+              ),
+              child: Text(
+                channels[index],
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
+          );
+        },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.green,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
+        onTap: (index) {
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LiveEventScreen()),
+            );
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.tv),
+            label: 'LIVE TV',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event),
+            label: 'LIVE EVENT',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LiveEventScreen extends StatefulWidget {
+  @override
+  _LiveEventScreenState createState() => _LiveEventScreenState();
+}
+
+class _LiveEventScreenState extends State<LiveEventScreen> {
+  List matches = [];
+  bool loading = true;
+  String errorMessage = '';
+
+  Future<void> fetchMatches() async {
+    try {
+      final response = await http.get(Uri.parse(
+        'https://raw.githubusercontent.com/mustafaaboras112/mustafa-tv/refs/heads/main/matches.json',
+      ));
+
+      if (response.statusCode == 200) {
+        final List data = json.decode(utf8.decode(response.bodyBytes));
+        setState(() {
+          matches = data;
+          loading = false;
+        });
+      } else {
+        throw Exception('فشل تحميل البيانات');
+      }
+    } catch (e) {
+      setState(() {
+        loading = false;
+        errorMessage = e.toString();
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchMatches();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("LIVE EVENT"),
+        centerTitle: true,
+        backgroundColor: Colors.red,
+        leading: BackButton(),
+      ),
+      body: loading
+          ? Center(child: CircularProgressIndicator())
+          : errorMessage.isNotEmpty
+              ? Center(child: Text(errorMessage))
+              : ListView.builder(
+                  padding: EdgeInsets.all(10),
+                  itemCount: matches.length,
+                  itemBuilder: (context, index) {
+                    final match = matches[index];
+                    return Card(
+                      margin: EdgeInsets.only(bottom: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      elevation: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(match['team2Flag'], style: TextStyle(fontSize: 30)),
+                                SizedBox(width: 8),
+                                Expanded(child: Text(match['team2'], style: TextStyle(fontSize: 18, color: Colors.red))),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade300,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(match['time'], style: TextStyle(fontWeight: FontWeight.bold)),
+                                ),
+                                Expanded(child: Text(match['team1'], textAlign: TextAlign.right, style: TextStyle(fontSize: 18, color: Colors.red))),
+                                SizedBox(width: 8),
+                                Text(match['team1Flag'], style: TextStyle(fontSize: 30)),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Text(match['league'], textAlign: TextAlign.center, style: TextStyle(color: Colors.grey.shade700)),
+                            SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(children: [
+                                  Icon(Icons.mic, size: 18),
+                                  SizedBox(width: 4),
+                                  Text(match['commentator'] ?? 'بدون معلق'),
+                                ]),
+                                Row(children: [
+                                  Text(match['channel'] ?? 'غير معروف'),
+                                  SizedBox(width: 4),
+                                  Icon(Icons.tv, size: 18),
+                                ]),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+    );
+  }
+}
