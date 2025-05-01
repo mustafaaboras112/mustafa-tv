@@ -1,12 +1,82 @@
 [
   {
-    "team1": "السعودية",
-    "team1Flag": "🇸🇦",
-    "team2": "مصر",
-    "team2Flag": "🇪🇬",
-    "time": "09:00 مساءً",
+    "team1": "برشلونة",
+    "team1Flag": "🇪🇸",
+    "team2": "إنتر ميلان",
+    "team2Flag": "🇮🇹",
+    "time": "10:00 مساءً",
+    "channel": "beIN SPORTS 1 HD Premium",
+    "commentator": "غير معروف",
+    "league": "دوري أبطال أوروبا – نصف النهائي"
+  },
+  {
+    "team1": "بيراميدز",
+    "team1Flag": "🏟️",
+    "team2": "بتروجيت",
+    "team2Flag": "⛽",
+    "time": "5:00 مساءً",
+    "channel": "ON Time Sports",
+    "commentator": "غير معروف",
+    "league": "الدوري المصري الممتاز"
+  },
+  {
+    "team1": "الأهلي",
+    "team1Flag": "🔴",
+    "team2": "الزمالك",
+    "team2Flag": "⚪",
+    "time": "8:00 مساءً",
+    "channel": "ON Time Sports",
+    "commentator": "غير معروف",
+    "league": "الدوري المصري الممتاز"
+  },
+  {
+    "team1": "الهلال",
+    "team1Flag": "💙",
+    "team2": "الاتحاد",
+    "team2Flag": "🟡",
+    "time": "9:00 مساءً",
+    "channel": "SSC Sports",
+    "commentator": "غير معروف",
+    "league": "الدوري السعودي للمحترفين"
+  },
+  {
+    "team1": "ريال مدريد",
+    "team1Flag": "⚪",
+    "team2": "أتلتيكو مدريد",
+    "team2Flag": "🔴",
+    "time": "10:30 مساءً",
     "channel": "beIN SPORTS 1",
-    "commentator": "رؤوف خليف",
-    "league": "كأس العرب"
+    "commentator": "غير معروف",
+    "league": "الدوري الإسباني"
+  },
+  {
+    "team1": "يوفنتوس",
+    "team1Flag": "⚫",
+    "team2": "ميلان",
+    "team2Flag": "🔴",
+    "time": "10:45 مساءً",
+    "channel": "AD Sports Premium 1",
+    "commentator": "غير معروف",
+    "league": "الدوري الإيطالي"
+  },
+  {
+    "team1": "بايرن ميونيخ",
+    "team1Flag": "🔴",
+    "team2": "بوروسيا دورتموند",
+    "team2Flag": "🟡",
+    "time": "9:30 مساءً",
+    "channel": "beIN SPORTS 5",
+    "commentator": "غير معروف",
+    "league": "الدوري الألماني"
+  },
+  {
+    "team1": "باريس سان جيرمان",
+    "team1Flag": "🔵",
+    "team2": "مارسيليا",
+    "team2Flag": "⚪",
+    "time": "10:00 مساءً",
+    "channel": "beIN SPORTS 6",
+    "commentator": "غير معروف",
+    "league": "الدوري الفرنسي"
   }
 ]
