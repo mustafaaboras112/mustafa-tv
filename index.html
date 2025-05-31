@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مصطفى أبوراس | مطور ويب ثلاثي الأبعاد</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6a11cb;
+      --secondary: #2575fc;
+      --accent: #ff4d4d;
+      --dark: #0f0f1a;
+      --light: #f8f9fa;
+      --glass: rgba(255, 255, 255, 0.1);
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--dark), #1a1a2e);
+      color: var(--light);
+      min-height: 100vh;
+      overflow-x: hidden;
+      perspective: 1000px;
+    }
+
+    /* تأثير الزجاج الشفاف */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--shadow);
+    }
+
+    /* الشريط العلوي */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1.5rem 5%;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+    }
+
+    header.scrolled {
+      padding: 1rem 5%;
+      background: rgba(15, 15, 26, 0.9);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: var(--light);
+      text-decoration: none;
+      font-weight: 700;
+      position: relative;
+      padding: 0.5rem 0;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+      left: 0;
+    }
+
+    .menu-toggle {
+      display: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+    }
+
+    /* القسم الرئيسي */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 5%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      flex: 1;
+      z-index: 2;
+      transform-style: preserve-3d;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      background: linear-gradient(to right, var(--light), #c9d6ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero h1 span {
+      display: inline-block;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      opacity: 0.9;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      color: white;
+      box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(106, 17, 203, 0.6);
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, var(--secondary), var(--primary));
+      opacity: 0;
+      transition: var(--transition);
+      z-index: -1;
+    }
+
+    .btn-primary:hover::before {
+      opacity: 1;
+    }
+
+    /* تأثيرات 3D للبطاقات */
+    .card-3d {
+      position: relative;
+      transform-style: preserve-3d;
+      transition: var(--transition);
+    }
+
+    .card-3d:hover {
+      transform: rotateY(10deg) rotateX(5deg) translateY(-10px);
+    }
+
+    .card-3d::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: translateZ(20px);
+      pointer-events: none;
+    }
+
+    /* نموذج 3D متحرك */
+    .hero-model {
+      position: absolute;
+      left: 55%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotateY(-20deg);
+      width: 40vw;
+      max-width: 600px;
+      min-width: 300px;
+      height: 60vh;
+      background: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') center/cover;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transform-style: preserve-3d;
+      transition: var(--transition);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero-model::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(106, 17, 203, 0.3), rgba(37, 117, 252, 0.3));
+      border-radius: var(--radius);
+    }
+
+    .hero-model::after {
+      content: '';
+      position: absolute;
+      bottom: -30px;
+      left: 30px;
+      width: 90%;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.4);
+      filter: blur(30px);
+      transform: translateZ(-50px);
+      z-index: -1;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(-50%, -50%) rotateY(-20deg) translateY(0); }
+      50% { transform: translate(-50%, -50%) rotateY(-20deg) translateY(-20px); }
+    }
+
+    /* الأقسام الأخرى */
+    section {
+      padding: 8rem 5%;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 3rem;
+      text-align: center;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    /* شبكة المشاريع */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .project-card {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      height: 250px;
+      transform-style: preserve-3d;
+      transition: var(--transition);
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px) rotateX(5deg);
+    }
+
+    .project-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .project-card:hover img {
+      transform: scale(1.1);
+    }
+
+    .project-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15, 15, 26, 0.9), transparent);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .project-card:hover .project-overlay {
+      opacity: 1;
+    }
+
+    .project-overlay h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      transform: translateY(20px);
+      transition: var(--transition);
+    }
+
+    .project-overlay p {
+      transform: translateY(30px);
+      transition: var(--transition);
+      transition-delay: 0.1s;
+    }
+
+    .project-card:hover .project-overlay h3,
+    .project-card:hover .project-overlay p {
+      transform: translateY(0);
+    }
+
+    /* قسم المهارات مع تأثيرات 3D */
+    .skills-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 3rem;
+      perspective: 1000px;
+    }
+
+    .skill-item {
+      padding: 1.5rem;
+      text-align: center;
+      border-radius: var(--radius);
+      background: var(--glass);
+      width: 120px;
+      height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: var(--transition);
+      transform-style: preserve-3d;
+    }
+
+    .skill-item:hover {
+      transform: rotateY(15deg) rotateX(10deg) translateZ(20px);
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+    }
+
+    .skill-item i {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* نموذج متحرك 3D */
+    .floating-cube {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      transform-style: preserve-3d;
+      animation: rotate 20s infinite linear;
+      opacity: 0.2;
+      z-index: -1;
+    }
+
+    @keyframes rotate {
+      from { transform: rotateX(0) rotateY(0) rotateZ(0); }
+      to { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+    }
+
+    .face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+    }
+
+    .front { transform: translateZ(100px); background: rgba(106, 17, 203, 0.1); }
+    .back { transform: translateZ(-100px); background: rgba(106, 17, 203, 0.1); }
+    .right { transform: rotateY(90deg) translateZ(100px); background: rgba(37, 117, 252, 0.1); }
+    .left { transform: rotateY(-90deg) translateZ(100px); background: rgba(37, 117, 252, 0.1); }
+    .top { transform: rotateX(90deg) translateZ(100px); background: rgba(255, 77, 77, 0.1); }
+    .bottom { transform: rotateX(-90deg) translateZ(100px); background: rgba(255, 77, 77, 0.1); }
+
+    /* التكيف مع الشاشات الصغيرة */
+    @media (max-width: 992px) {
+      .hero h1 {
+        font-size: 3rem;
+      }
+      
+      .hero-model {
+        opacity: 0.3;
+        left: 70%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        height: 100vh;
+        background: rgba(15, 15, 26, 0.95);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: var(--transition);
+        z-index: 90;
+      }
+      
+      .nav-links.active {
+        right: 0;
+      }
+      
+      .menu-toggle {
+        display: block;
+        z-index: 100;
+      }
+      
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 8rem;
+      }
+      
+      .hero-content {
+        margin-bottom: 3rem;
+      }
+      
+      .hero p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .hero-model {
+        position: relative;
+        left: 50%;
+        top: auto;
+        bottom: 0;
+        width: 80%;
+        height: 300px;
+        opacity: 0.5;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- الشريط العلوي -->
+  <header class="glass">
+    <a href="#" class="logo">ABURAS</a>
+    
+    <nav class="nav-links">
+      <a href="#home">الرئيسية</a>
+      <a href="#about">عنّي</a>
+      <a href="#skills">المهارات</a>
+      <a href="#projects">المشاريع</a>
+      <a href="#contact">تواصل</a>
+    </nav>
+    
+    <div class="menu-toggle">
+      <i class="fas fa-bars"></i>
+    </div>
+  </header>
+
+  <!-- القسم الرئيسي -->
+  <section id="home" class="hero">
+    <!-- مكعب عائم ثلاثي الأبعاد -->
+    <div class="floating-cube" style="top: 20%; left: 10%;">
+      <div class="face front"><i class="fab fa-html5"></i></div>
+      <div class="face back"><i class="fab fa-css3-alt"></i></div>
+      <div class="face right"><i class="fab fa-js"></i></div>
+      <div class="face left"><i class="fab fa-react"></i></div>
+      <div class="face top"><i class="fas fa-code"></i></div>
+      <div class="face bottom"><i class="fas fa-laptop-code"></i></div>
+    </div>
+    
+    <div class="hero-content">
+      <h1>
+        <span class="animate-text">مرحباً، أنا مصطفى أبوراس</span><br>
+        <span class="animate-text">مطور واجهات ثلاثية الأبعاد</span>
+      </h1>
+      <p class="animate-text">
+        مصمم ومطور واجهات مستخدم مبتكرة بتقنيات حديثة وتجارب تفاعلية غامرة
+      </p>
+      <a href="#projects" class="btn btn-primary animate-text">أعمالي</a>
+    </div>
+    
+    <div class="hero-model card-3d"></div>
+  </section>
+
+  <!-- قسم عني -->
+  <section id="about" class="about">
+    <h2 class="section-title">من أنا؟</h2>
+    
+    <div class="glass" style="padding: 3rem; max-width: 1000px; margin: 0 auto; transform-style: preserve-3d;">
+      <div class="card-3d" style="transform-style: preserve-3d;">
+        <p style="margin-bottom: 1.5rem; font-size: 1.1rem;">
+          أنا <strong>مصطفى أبوراس</strong>، مطور واجهات أمامية من إدلب، سوريا. متخصص في إنشاء تجارب مستخدم غامرة باستخدام أحدث تقنيات الويب ثلاثية الأبعاد.
+        </p>
+        
+        <p style="margin-bottom: 1.5rem; font-size: 1.1rem;">
+          لدي شغف كبير بتحويل الأفكار الإبداعية إلى واقع رقمي ملموس، مع التركيز على الأداء العالي والتجربة السلسة للمستخدم.
+        </p>
+        
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 2rem;">
+          <div class="btn" style="background: var(--primary);">HTML5/CSS3</div>
+          <div class="btn" style="background: var(--secondary);">JavaScript</div>
+          <div class="btn" style="background: var(--accent);">Three.js</div>
+          <div class="btn" style="background: #6a11cb;">WebGL</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم المهارات -->
+  <section id="skills" class="skills">
+    <h2 class="section-title">مهاراتي</h2>
+    
+    <div class="skills-container">
+      <div class="skill-item card-3d">
+        <i class="fab fa-html5"></i>
+        <span>HTML5</span>
+      </div>
+      
+      <div class="skill-item card-3d">
+        <i class="fab fa-css3-alt"></i>
+        <span>CSS3</span>
+      </div>
+      
+      <div class="skill-item card-3d">
+        <i class="fab fa-js"></i>
+        <span>JavaScript</span>
+      </div>
+      
+      <div class="skill-item card-3d">
+        <i class="fab fa-react"></i>
+        <span>React</span>
+      </div>
+      
+      <div class="skill-item card-3d">
+        <i class="fas fa-cube"></i>
+        <span>Three.js</span>
+      </div>
+      
+      <div class="skill-item card-3d">
+        <i class="fas fa-mobile-alt"></i>
+        <span>Responsive</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم المشاريع -->
+  <section id="projects">
+    <h2 class="section-title">مشاريعي</h2>
+    
+    <div class="projects-grid">
+      <div class="project-card card-3d">
+        <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1528&q=80" alt="مشروع 1">
+        <div class="project-overlay glass">
+          <h3>موقع ثلاثي الأبعاد</h3>
+          <p>تصميم موقع بتجربة ثلاثية الأبعاد غامرة</p>
+        </div>
+      </div>
+      
+      <div class="project-card card-3d">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="مشروع 2">
+        <div class="project-overlay glass">
+          <h3>لوحة تحكم تفاعلية</h3>
+          <p>لوحة تحكم ببيانات ثلاثية الأبعاد</p>
+        </div>
+      </div>
+      
+      <div class="project-card card-3d">
+        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="مشروع 3">
+        <div class="project-overlay glass">
+          <h3>معرض أعمال</h3>
+          <p>معرض أعمال بتقنيات الويب الحديثة</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم التواصل -->
+  <section id="contact" style="padding-bottom: 5rem;">
+    <h2 class="section-title">تواصل معي</h2>
+    
+    <div class="glass" style="padding: 3rem; max-width: 600px; margin: 0 auto; transform-style: preserve-3d;">
+      <div class="card-3d" style="padding: 2rem; transform-style: preserve-3d;">
+        <form style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div>
+            <label for="name" style="display: block; margin-bottom: 0.5rem;">اسمك</label>
+            <input type="text" id="name" style="width: 100%; padding: 1rem; border-radius: var(--radius); border: none; background: rgba(255,255,255,0.1); color: white;">
+          </div>
+          
+          <div>
+            <label for="email" style="display: block; margin-bottom: 0.5rem;">بريدك الإلكتروني</label>
+            <input type="email" id="email" style="width: 100%; padding: 1rem; border-radius: var(--radius); border: none; background: rgba(255,255,255,0.1); color: white;">
+          </div>
+          
+          <div>
+            <label for="message" style="display: block; margin-bottom: 0.5rem;">رسالتك</label>
+            <textarea id="message" rows="5" style="width: 100%; padding: 1rem; border-radius: var(--radius); border: none; background: rgba(255,255,255,0.1); color: white;"></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" style="align-self: center;">إرسال</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- الفوتر -->
+  <footer style="text-align: center; padding: 2rem; background: rgba(0,0,0,0.3);">
+    <p>© <span id="year"></span> مصطفى أبوراس. جميع الحقوق محفوظة</p>
+    <div style="display: flex; justify-content: center; gap: 1.5rem; margin-top: 1rem;">
+      <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-github"></i></a>
+      <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>
+      <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-twitter"></i></a>
+      <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
+    </div>
+  </footer>
+
+  <script>
+    // تحديث السنة في الفوتر
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
+    // تأثير التمرير للهيدر
+    window.addEventListener('scroll', function() {
+      const header = document.querySelector('header');
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+    
+    // قائمة الهاتف
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    
+    menuToggle.addEventListener('click', function() {
+      navLinks.classList.toggle('active');
+      menuToggle.querySelector('i').classList.toggle('fa-times');
+    });
+    
+    // إغلاق القائمة عند النقر على رابط
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', function() {
+        navLinks.classList.remove('active');
+        menuToggle.querySelector('i').classList.remove('fa-times');
+      });
+    });
+    
+    // تأثيرات الظهور عند التمرير
+    const animateElements = document.querySelectorAll('.animate-text, .card-3d, .section-title');
+    
+    const animateOnScroll = function() {
+      animateElements.forEach(element => {
+        const elementPosition = element.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        
+        if (elementPosition < windowHeight - 100) {
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        }
+      });
+    };
+    
+    // تعيين الخصائص الأولية
+    animateElements.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    });
+    
+    window.addEventListener('scroll', animateOnScroll);
+    window.addEventListener('load', animateOnScroll);
+    
+    // تأثيرات 3D للبطاقات عند تحريك الماوس
+    document.addEventListener('mousemove', function(e) {
+      const cards = document.querySelectorAll('.card-3d');
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const angleX = (y - centerY) / 20;
+        const angleY = (centerX - x) / 20;
+        
+        card.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+      });
+    });
+  </script>
+</body>
+</html>
